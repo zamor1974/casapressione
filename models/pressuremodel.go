@@ -72,7 +72,7 @@ func GetPressuresSqlx(db *sql.DB) *Pressures {
 }
 func GetLastAltitudeSqlx(db *sql.DB) *Pressures {
 	pressures := Pressures{}
-	rows, err := db.Query("SELECT id, valore, data_inserimento FROM pressione where id = (select max(id) from pioggia)")
+	rows, err := db.Query("SELECT id, valore, data_inserimento FROM pressione where id = (select max(id) from pressione)")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -130,7 +130,6 @@ func PostPressureSqlx(db *sql.DB, reqPressure *ReqAddPressure) (*Pressure, strin
 
 	//sqlStatement := fmt.Sprintf("insert into 'pioggia' ('valore','data_inserimento') values (%d,CURRENT_TIMESTAMP) RETURNING id", value)
 	sqlStatement := fmt.Sprintf("insert into pressione (valore,data_inserimento) values (%.2f,CURRENT_TIMESTAMP) RETURNING id", value)
-	log.Println(sqlStatement)
 
 	err := db.QueryRow(sqlStatement).Scan(&lastInsertId)
 
